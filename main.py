@@ -12,16 +12,29 @@ bot = Bot(token=TOKEN)
 dp = Dispatcher()
 games = {}
 
-# Скорочений список локацій (додай свої назад, якщо треба)
+# ВЕЛИЧЕЗНИЙ СПИСОК КЛАСИЧНИХ ЛОКАЦІЙ
 classic_locations = [
-    "🏨 Готель", "🏫 Школа", "🏥 Лікарня", "🏦 Банк", "🏢 スーパーмаркет", 
+    "🏨 Готель", "🏫 Школа", "🏥 Лікарня", "🏦 Банк", "🏢 Супермаркет", 
     "🚒 Пожежна частина", "👮 Поліцейська дільниця", "🏛 Музей", "📚 Бібліотека", "⛪ Церква",
-    "🚢 Підводний човен", "✈️ Літак", "🚀 Космічна станція", "🚂 Потяг", "🛳 Круїзний лайнер"
+    "🚢 Підводний човен", "✈️ Літак", "🚀 Космічна станція", "🚂 Потяг", "🛳 Круїзний лайнер",
+    "🏰 Замок", "🎭 Театр", "🎪 Цирк", "🎰 Казино", "🌋 Вулкан", 
+    "🛸 Корабель прибульців", "⛏️ Шахта", "🏝️ Безлюдний острів", "🍕 Піцерія", "ж Вокзал",
+    "🪖 Військова база", "🧪 Лабораторія", "🎥 Кіностудія", "🏟️ Стадіон", "🏎️ Трек Формули-1"
 ]
 
+# АБСОЛЮТНО ВСІ ПЕРСОНАЖІ ТА КАРТИ З CLASH ROYALE
 clash_royale_cards = [
     "⚔️ П.Е.К.К.А (P.E.K.K.A)", "🐗 Вершник на кабані (Hog Rider)", "🛡️ Мегалицар (Mega Knight)", 
-    "⚡ Електромаг (Electro Wizard)", "🪵 Бревно (The Log)", "🏹 Принцеса (Princess)"
+    "⚡ Електромаг (Electro Wizard)", "🪵 Колода (The Log)", "🏹 Принцеса (Princess)",
+    "👑 Король (King)", "👸 Королева ЛучOperation (Archer Queen)", "🧱 Хранителі (Guardians)",
+    "🤴 Принц (Prince)", "🐴 Темний Принц (Dark Prince)", "☠️ Армія Скелетів (Skeleton Army)",
+    "🧙‍♂️ Маг (Wizard)", "❄️ Крижаний Маг (Ice Wizard)", "👺 Гобліни (Goblins)", 
+    "🎯 Мушкетер (Musketeer)", "🛡️ Лицар (Knight)", "🦇 Кажани (Bats)",
+    "🐉 Полум'яний Дракон (Inferno Dragon)", "👻 Привид (Royal Ghost)", "🏹 Лучники (Archers)",
+    "💣 Гігантський Скелет (Giant Skeleton)", "🧔 Гігант (Giant)", "⚡ Іскриста (Sparky)",
+    "🎈 Повітряна куля (Balloon)", "⛏️ Шахтар (Miner)", "🧙‍♀️ Відьма (Witch)", 
+    "🦇 Нічна Відьма (Night Witch)", "🐐 Вершниця на барані (Ram Rider)", "🪵 Ка can (Executioner)",
+    "🪓 Валькірія (Valkyrie)", "🩻 Скелет-Еволюція (Evolved Skeleton)", "👑 Королівський Гігант (Royal Giant)"
 ]
 
 @dp.message(Command("start"))
@@ -77,7 +90,7 @@ async def show_role_handler(callback: types.CallbackQuery):
         await callback.message.edit_text("🎭 Всі дізналися ролі! Починайте!")
         del games[chat_id]
 
-# --- ЦЕЙ ШМАТОК ДЛЯ ОБМАНУ RENDER ---
+# --- ВЕБ-СЕРВЕР ДЛЯ RENDER ---
 async def handle_index(request):
     return web.Response(text="Бот працює!")
 
@@ -86,7 +99,6 @@ async def start_web_server():
     app.router.add_get('/', handle_index)
     runner = web.AppRunner(app)
     await runner.setup()
-    # Render сам дає порт у змінну оточення PORT, якщо її немає — ставимо 8080
     import os
     port = int(os.getenv("PORT", 8080))
     site = web.TCPSite(runner, '0.0.0.0', port)
@@ -94,7 +106,6 @@ async def start_web_server():
     print(f"Веб-сервер запущено на порту {port}")
 
 async def main():
-    # Запускаємо веб-сервер для Render
     await start_web_server()
     print("Бот запущений з двома режимами!")
     await dp.start_polling(bot)
